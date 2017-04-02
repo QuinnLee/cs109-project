@@ -18,10 +18,8 @@ def get_api_key():
 def ping_api(url):
     r = requests.get(url)
 
-    if r.status_code == 200 and 'genre' in url:
-        data = r.json()['genres']
-    elif r.status_code == 200:
-        data = r.json()['results']
+    if r.status_code == 200:
+        data = r.json()
     else:
         data = "Nada."
 
@@ -34,7 +32,6 @@ def get_genres():
 
     return ping_api(url)
 
-
 def find_movie_by_name(query_string):
     url_add = "search/movie"
     url = "{}{}?api_key={}&query={}".format(get_base_url(), url_add,
@@ -42,15 +39,15 @@ def find_movie_by_name(query_string):
     
     return ping_api(url)
 
+def get_popular(page = 1):
+    url_add = "movie/popular"
+    url = "{}{}?api_key={}&page={}".format(get_base_url(), url_add, get_api_key(), page)
+    return ping_api(url)
+
 
 def main():
-    """ Runs data processing scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed).
-    """
-
     test = find_movie_by_name('Allonsanfan')
     print(test)
-
 
 if __name__ == '__main__':
     main()

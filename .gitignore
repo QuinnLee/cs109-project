@@ -77,3 +77,7 @@ notebooks/FinalProject.ipynb
 
 # API keys, etc.
 /config/
+
+# Exclude Angela's VirtualBox shared folder
+/_vm/
+
