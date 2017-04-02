@@ -74,3 +74,6 @@ target/
 
 # Exclude project instructions
 notebooks/FinalProject.ipynb
+
+# API keys, etc.
+/config/
