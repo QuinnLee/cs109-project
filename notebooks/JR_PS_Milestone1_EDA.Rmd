@@ -1,0 +1,189 @@
+---
+title: "Milestone 1"
+author: "Johanna Ramos and Pranav Sidhwani"
+date: "4/5/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+```{r}
+# CHANGE THIS TO WHEREVER THE KAGGLE DATASET IS ON YOUR MACHINE
+# Setting the working directory
+dir <- "/Users/Pranav/Desktop/Courses/CS109b/Project/Data/"
+```
+
+```{r}
+# Libraries
+library(splitstackshape)
+library(igraph)
+library(ggplot2)
+library(reshape2)
+library(corrplot)
+library(RColorBrewer)
+
+# Loading the dataset
+base <- read.csv(paste0(dir, "movie_metadata.csv"))
+
+# Text to columns for genre
+base$genres.original <- base$genres
+base <- cSplit(base, 'genres', sep="|", type.convert=FALSE)
+
+# First 5 observations
+head(base)
+```
+
+```{r}
+# Preparing dataset
+# Getting the list of unique genres
+genre1 <- unique(base$genres_1)
+genre2 <- unique(base$genres_2)
+genre3 <- unique(base$genres_3)
+genre4 <- unique(base$genres_4)
+genre5 <- unique(base$genres_5)
+genre6 <- unique(base$genres_6)
+genre7 <- unique(base$genres_7)
+genre8 <- unique(base$genres_8)
+
+genre2 <- genre2[!genre2 %in% genre1]
+genre3 <- genre3[!genre3 %in% c(genre1, genre2)]
+genre4 <- genre4[!genre4 %in% c(genre1, genre2, genre3)]
+genre5 <- genre5[!genre5 %in% c(genre1, genre2, genre3, genre4)]
+genre6 <- genre6[!genre6 %in% c(genre1, genre2, genre3, genre4, genre5)]
+genre7 <- genre7[!genre7 %in% c(genre1, genre2, genre3, genre4, genre5, genre6)]
+genre8 <- genre8[!genre8 %in% c(genre1, genre2, genre3, genre4, genre5, genre6, genre7)]
+
+# removing NA
+genre2 <- genre2[!is.na(genre2)]
+
+# Getting the list of genres
+genres <- c(genre1, genre2)
+
+# Creating a dataframe for NODES
+genres <- data.frame(genres)
+genres$frequency <- 0
+
+# Getting frequency
+for (i in 1:nrow(genres)){
+  genres$frequency[i] <- length(grep(genres$genres[i], base$genres.original))
+}
+
+# Getting frequency of joint occurance - LINKS
+# Getting all possible combinations
+combo <- t(combn(genres$genres, 2))
+combo.df <- data.frame(combo[,1])
+combo.df$genre2 <- combo[,2]
+colnames(combo.df) <- c("genre1", "genre2")
+
+combo.df$frequency <- 0
+
+for (i in 1:nrow(combo.df)){
+  combo.df$frequency[i] <- length(grep(paste0(combo.df$genre1[i], ".*", combo.df$genre2[i], "|", combo.df$genre2[i], ".*", combo.df$genre1[i]), base$genres.original))
+}
+
+for.plot <- dcast(combo.df, genre1 ~ genre2, sum)
+rownames(for.plot) <- for.plot$genre1
+for.plot$genre1 <- NULL
+
+for.plot2 <- data.matrix(for.plot)
+corrplot(for.plot2, method="square", tl.cex=0.5, mar=c(0,0,2,0), is.corr=F)
+```
+
+```{r}
+# For network plot
+# Changing column name to avoid confusion
+colnames(combo.df)[colnames(combo.df) == "frequency"] <- "frequency2"
+
+# Creating a "graph data frame" for the network plot
+net <- graph.data.frame(combo.df, genres, directed=T)
+
+# Simplifying
+net <- simplify(net, remove.multiple = F, remove.loops = T)
+
+# Setting node size based on frequency of occurrence
+V(net)$size <- V(net)$frequency*0.01
+
+# Set edge width based on joint frequency
+E(net)$width <- E(net)$frequency2/200
+
+# Change arrow size and edge color
+E(net)$arrow.size <- .2
+E(net)$edge.color <- "gray80"
+
+# Final plot
+plot(net, vertex.label=V(net)$name, vertex.label.color="black", vertex.label.cex = 0.5, edge.arrow.size=0, vertex.color="#C6DBEF")
+```
+
+```{r}
+# More EDA
+# Histogram - Genre
+genres <- genres[order(-genres$frequency), ]
+genre.hist <-  ggplot(data = genres) + 
+  geom_bar(aes(x=reorder(genres, -frequency), y=frequency), stat="identity", fill="#C6DBEF") + 
+  ggtitle("Frequency of genres") +
+  xlab("genre") +
+  ylab("frequency") +
+  theme_bw() + 
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 90, hjust = 1))
+genre.hist
+```
+
+```{r}
+# Histogram - Bigrams
+combo.cat <- data.frame(paste(combo.df$genre1, combo.df$genre2, sep="-"))
+colnames(combo.cat) <- c("bigram")
+combo.cat$frequency <- combo.df$frequency
+
+combo.cat <- combo.cat[order(-combo.cat$frequency), ]
+combo.hist <-  ggplot(data = combo.cat[1:25, ]) + 
+  geom_bar(aes(x=reorder(bigram, -frequency), y=frequency), stat="identity", fill="#C6DBEF") + 
+  ggtitle("Frequency of bigrams") +
+  ylab("frequency") +
+  xlab("bigram") +
+  theme_bw() + 
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 90, hjust = 1))
+combo.hist
+```
+
+```{r}
+# Length of genre
+genres <- data.frame(base$genres.original)
+genres <- data.frame(gsub("|", " ", genres$base.genres.original, fixed = TRUE))
+colnames(genres) <- c("genres")
+length <- data.frame(sapply(gregexpr("\\S+", genres$genres), length))
+colnames(length) <- c("length")
+genres <- data.frame(genres, length)
+
+# Histogram
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+p.length <-  ggplot(data = genres) + 
+  geom_bar(aes(x=length), fill="#C6DBEF", width=0.6) + 
+  ggtitle("Genres per movie") +
+  xlab("number of genres") +
+  scale_x_continuous(breaks=number_ticks(8)) +
+  theme_bw() + 
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(face = "bold"))
+p.length
+```
+
+```{r}
+genres$cont_rating <- base$content_rating 
+# Histogram by Rating
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+p.lenght.rating <-  ggplot(data = genres) + 
+  geom_bar(aes(x=length), fill="#C6DBEF", width=0.6) + 
+  scale_x_continuous(breaks=number_ticks(8)) +
+  facet_wrap( "cont_rating" ) +
+  ggtitle("Number of genres per movie by rating") +
+  theme_bw() + 
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(face = "bold"))
+p.lenght.rating
+```
