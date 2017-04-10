@@ -8,11 +8,7 @@ def get_base_url():
 
 def get_api_key():
     config = ConfigParser()
-    if 'notebooks' in os.getcwd():
-        config.read('../config/keys.ini')
-    else:
-        config.read('../../config/keys.ini')
-
+    config.read('../../config/keys.ini')
     return config.get('TMDb', 'key')
 
 def ping_api(url):
@@ -21,7 +17,7 @@ def ping_api(url):
     if r.status_code == 200:
         data = r.json()
     else:
-        data = "Nada."
+        data = []
 
     return data    
 
