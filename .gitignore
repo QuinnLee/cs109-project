@@ -81,3 +81,4 @@ notebooks/FinalProject.ipynb
 # Exclude Angela's VirtualBox shared folder
 /_vm/
 
+.DS_Store
