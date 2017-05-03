@@ -40,6 +40,7 @@ JSON format of the data, cleaned
 
 Whole data set, used to create both test and train
 - [`themoviedb-4-18-2017.json`](https://s3.amazonaws.com/cs109b-data/themoviedb-4-18-2017.json)
+
 Original, uncleaned train set
 - [`themoviedb-sample-4-17-2017.json`](https://s3.amazonaws.com/cs109b-data/themoviedb-sample-4-17-2017.json)
 
