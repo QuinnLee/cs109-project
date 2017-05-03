@@ -28,7 +28,7 @@ Note: We did not use the Tensorboard in the final write-up, but the code can be 
 
 **[Final dataset (.zip)](https://s3.amazonaws.com/cs109b-data/final_data.zip)**
 
-### Pre-processed data for CNN
+Pre-processed data for CNN
 - [`test_X (.npy)`](https://s3.amazonaws.com/cs109b-data/test_X_array.npy)
 - [`test_y (.npy)`](https://s3.amazonaws.com/cs109b-data/test_y_array.npy)
 - [`train_y (.npy)`](https://s3.amazonaws.com/cs109b-data/Y_array.npy)
