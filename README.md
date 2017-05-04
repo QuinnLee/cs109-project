@@ -7,9 +7,16 @@
 - Johanna Ramos
 - Pranav Sidhwani
 
+#### Final deliverables
+- [Up to date versions of all your notebooks](https://github.com/QuinnLee/cs109-project/tree/master/notebooks/milestone_5)
+- README to go with the notebooks that explains how much the notebooks changed since the milestone submissions - See below.
+- [The 6 page final report as a PDF]
+- The link to your 2 minute screencast on YouTube. (Upload (Links to an external site.)Links to an external site. your screenscast to YouTube.)
+- A link to a .zip file with all your cleaned data
+
 ----
 
-## Updates (as of 3 May 2017)
+## Guide to our project
 
 We consolidated all the code into several notebooks, which are located [here, in the `milestone_5` subdirectory](https://github.com/QuinnLee/cs109-project/tree/master/notebooks/milestone_5).  All of the [previous milestone notebooks](https://github.com/QuinnLee/cs109-project/tree/master/notebooks) are in their respective directories.
 
