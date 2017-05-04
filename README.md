@@ -8,11 +8,10 @@
 - Pranav Sidhwani
 
 #### Final deliverables
-- [Up to date versions of all your notebooks](https://github.com/QuinnLee/cs109-project/tree/master/notebooks/milestone_5)
-- README to go with the notebooks that explains how much the notebooks changed since the milestone submissions - See below.
-- [The 6 page final report as a PDF]
-- The link to your 2 minute screencast on YouTube. (Upload (Links to an external site.)Links to an external site. your screenscast to YouTube.)
-- A link to a .zip file with all your cleaned data
+- [Updated, final notebooks](https://github.com/QuinnLee/cs109-project/tree/master/notebooks/milestone_5)
+- [6-page final report](https://github.com/QuinnLee/cs109-project/blob/master/CS109B_Project_Final_report_Team33.pdf)
+- [Screencast](https://www.youtube.com/watch?v=Q02kYhx5IHg&feature=youtu.be)
+- [Data .zip](https://s3.amazonaws.com/cs109b-data/final_data.zip)
 
 ----
 
