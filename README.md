@@ -10,7 +10,7 @@
 #### Final deliverables
 - [Updated, final notebooks](https://github.com/QuinnLee/cs109-project/tree/master/notebooks/milestone_5)
 - [6-page final report](https://github.com/QuinnLee/cs109-project/blob/master/CS109B_Project_Final_report_Team33.pdf)
-- [Screencast](https://www.youtube.com/watch?v=Q02kYhx5IHg&feature=youtu.be)
+- [Screencast](https://www.youtube.com/watch?v=Q02kYhx5IHg)
 - [Data .zip](https://s3.amazonaws.com/cs109b-data/final_data.zip)
 
 ----
